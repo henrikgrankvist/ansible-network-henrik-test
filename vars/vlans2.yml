@@ -1,4 +1,5 @@
-- id: 888
-   name: vlan1
-- id: 889
-  name: vlan2
+vlans:
+  - id: 888
+    name: vlan1
+  - id: 889
+    name: vlan2

@@ -27,8 +27,12 @@
         - "{{ item }}"
       loop: "{{ vlan_list }}"
 
+    - include_vars:
+        file: ./vars/vlans2.yml
+        name: vlan_list
+
     - debug:
         msg:
         - "{{ item.id }}"
         - "{{ item.name }}"
-      loop: "{{ lookup('file', filepath, wantlist=True) }}"
+      loop: "{{ vlan_list.vlans }}"
