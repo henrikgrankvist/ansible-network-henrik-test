@@ -1,0 +1,5 @@
+vlans:
+  666:
+    name: devil
+  667:
+    name: devil2

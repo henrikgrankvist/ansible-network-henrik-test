@@ -1,0 +1,34 @@
+---
+- name: add vlans
+  hosts: ios
+  gather_facts: no
+
+  vars:
+    vlans:
+      - id: 888
+        name: vlan1
+      - id: 889
+        name: vlan2
+    filepath: ./vars/vlans2.yml
+    vlan_list: "{{ query('file', filepath) }}"
+    
+  #vars_files: ./vars/vlans2.yml
+
+  
+  tasks:
+    - debug:
+        msg:
+        - "{{ item.id }}"
+        - "{{ item.name }}"
+      loop: "{{ vlans }}"
+
+    - debug:
+        msg:
+        - "{{ item }}"
+      loop: "{{ vlan_list }}"
+
+    - debug:
+        msg:
+        - "{{ item.id }}"
+        - "{{ item.name }}"
+      loop: "{{ lookup('file', filepath, wantlist=True) }}"
