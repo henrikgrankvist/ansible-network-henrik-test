@@ -1,5 +1,17 @@
 vlans:
-  666:
-    name: devil
-  667:
-    name: devil2
+  - id: 2
+    name: NATIVE
+  - id: 350
+    name: INFRA
+    subnet: 10.190.8.0/24
+    vrf: infra
+  - id: 351
+    name: INFRA-WIFI
+  - id: 888
+    name: MY_VLAN_888
+  - id: 889
+    name: my-other-vlan
+  - id: 1500
+    name: SDP_POC_CLIENT-LAN
+  - id: 1812
+    name: PARTNER-GUEST-LAN

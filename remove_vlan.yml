@@ -1,0 +1,56 @@
+# Testing removing VLANs that are not part of the vlans.yml file.
+
+
+---
+- name: add vlans
+  hosts: ios
+  gather_facts: no
+
+  vars:
+    filepath: ./vars/vlans.yml
+
+  
+  tasks:
+    - include_vars:
+        file: "{{ filepath }}"
+        name: vlan_list
+
+    - name: GATHER CURRENLY CONFIGURED VLANS FROM SWITCH
+      cisco.ios.ios_vlans:
+        state: gathered
+      register: vlan_data
+
+    - debug:
+        msg:
+        - "{{ vlan_data.gathered }}"
+        
+    - debug:
+        msg:
+        - "{{ item.name }}"
+      loop: "{{ vlan_data.gathered }}"
+      when: item.vlan_id == 888
+
+    - name: DELETE VLAN 888 IF PRESENT
+      cisco.ios.ios_vlans:
+        state: deleted
+        config:
+          - vlan_id: "{{ item.vlan_id }}"
+      loop: "{{ vlan_data.gathered }}"
+      when: item.vlan_id == 888
+
+    - name: INITIATE EMPTY LIST
+      set_fact:
+        vlan_append_list: []
+
+    - name: APPEND GATHERED VLANS TO THE LIST
+      set_fact:
+        vlan_append_list: "{{ vlan_append_list + [item.id] }}"
+      loop: "{{ vlan_list.vlans }}"
+
+    - debug:
+        msg:
+        - "REMOVING VLAN: {{ item.vlan_id }}"
+      loop: "{{ vlan_data.gathered }}"
+      when: item.vlan_id not in vlan_append_list
+
+
