@@ -42,15 +42,15 @@
       set_fact:
         vlan_append_list: []
 
-    - name: APPEND GATHERED VLANS TO THE LIST
+    - name: APPEND INDENTED VLANS TO THE LIST
       set_fact:
         vlan_append_list: "{{ vlan_append_list + [item.id] }}"
       loop: "{{ vlan_list.vlans }}"
 
-    - debug:
+    - debug: # Comparing configured VLANs with indented VLANs and removing any VLAN that shouldn't exist.
         msg:
         - "REMOVING VLAN: {{ item.vlan_id }}"
       loop: "{{ vlan_data.gathered }}"
-      when: item.vlan_id not in vlan_append_list
+      when: item.vlan_id not in vlan_append_list 
 
 
